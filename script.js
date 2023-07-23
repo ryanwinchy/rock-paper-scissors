@@ -43,7 +43,7 @@ function playRound(playerSelection, computerSelection) {
     }
 
     else if ((playerSelection === "rock") & (computerSelection === "paper")) {
-        result = "You lose! Paper beats Scissors!"; 
+        result = "You lose! Paper beats Rock!"; 
         playerScore = 0;
         computerScore = 1;
     }
@@ -95,23 +95,27 @@ function playRound(playerSelection, computerSelection) {
   }
    
 
+playerScore = 0;   //Global so score is kept.
+computerScore = 0;
 
-game();
 
-function game() {
+function game(playerChoice) {
     result = "";
-    playerScore = 0;
-    computerScore = 0;
+    playerSelection = playerChoice;
     
-    for (let i =1; i <= 5; i++) {
 
-        let playerSelection = prompt("Enter Rock, Paper, or Scissors fiend!");
-        playerSelection = playerSelection.toLowerCase();
+        /*let playerSelection = prompt("Enter Rock, Paper, or Scissors fiend!");           //Remove this probably!
+        playerSelection = playerSelection.toLowerCase();*/
+
+       
 
         const computerSelection = getComputerChoice();
 
         result = playRound(playerSelection,computerSelection);
-        console.log(result);
+        
+        const displayResult = document.querySelector('.result');
+        displayResult.textContent = `${result}`;                      //Returns result as text content inside .result div!
+
 
         if ((result === "You win! Scissors beats Paper!") || (result === "You win! Paper beats Rock!") || (result === "You win! Rock beats Scissors!")) {
             playerScore ++;
@@ -119,19 +123,41 @@ function game() {
         else if ((result === "You lose! Rock beats Scissors!") || (result === "You lose! Scissors beats Paper!") || (result === "You lose! Paper beats Scissors!")) {
             computerScore ++;
         }
-        console.log("Player Score: " + playerScore + " Computer Score: " + computerScore)
-    }
+        //console.log("Player Score: " + playerScore + " Computer Score: " + computerScore)
 
-    if (playerScore > computerScore) {
-        console.log("Final result, YOU WIN!");
-    }
-    else if (playerScore < computerScore) {
-        console.log("Final result, YOU LOSE LOL!");
-    } 
+        const displayPlayerScore = document.querySelector('.playerScore');
+        displayPlayerScore.textContent = `${playerScore}`;                      //Returns scores as text content.
 
-    else {
-        console.log("Final result, TIE!");
-    }
+        const displayComputerScore = document.querySelector('.computerScore');
+        displayComputerScore.textContent = `${computerScore}`;
+
+    
+    
+
+    if ((playerScore >= 5) ||  (computerScore >= 5)) {
+
+        if (playerScore > computerScore) {
+            const displayFinalScore = document.querySelector('.finalWinner');
+        displayFinalScore.textContent = "YOU WIN!";
+        
+            const buttons = document.querySelectorAll('button');    //Removes buttons so game ends.
+            buttons.forEach(button => {
+                button.remove();
+              });
+        }
+        else if (playerScore < computerScore) {
+            const displayFinalScore = document.querySelector('.finalWinner');
+            displayFinalScore.textContent = "YOU LOSE!";
+
+            const buttons = document.querySelectorAll('button');    //Removes buttons so game ends.
+            buttons.forEach(button => {
+                button.remove();
+        });
+
+    
+
+    }};
+
 
 
 return 0;
@@ -139,4 +165,18 @@ return 0;
 }
 
 
-  
+const rockButton = document.querySelector('.rock');         //Selects the rock button
+rockButton.addEventListener('click', () => {
+    game("rock");  
+                });                //When clicked, calls the game passing rock as player input.
+
+const paperButton = document.querySelector('.paper');         //Selects the rock button
+paperButton.addEventListener('click', () => {
+    game("paper");  
+                });                //When clicked, calls the game passing rock as player input.
+
+
+const scissorsButton = document.querySelector('.scissors');         //Selects the rock button
+scissorsButton.addEventListener('click', () => {
+    game("scissors");  
+                });                //When clicked, calls the game passing rock as player input.
